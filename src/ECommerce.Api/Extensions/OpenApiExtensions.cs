@@ -1,5 +1,3 @@
-using Scalar.AspNetCore;
-
 namespace ECommerce.Api.Extensions;
 
 public static class OpenApiExtensions
@@ -26,7 +24,6 @@ public static class OpenApiExtensions
         this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapOpenApi();
-        endpoints.MapScalarApiReference();
         return endpoints;
     }
 }

@@ -2,7 +2,7 @@
 
 All JSON. Except where marked, endpoints require a `Authorization: Bearer <JWT>` header.
 
-An OpenAPI document is generated and mapped in development by the OpenAPI extension (`AddOpenApi`/`MapOpenApi`) at `/openapi/v1.json`, with an interactive **Scalar** UI at `/scalar`.
+An OpenAPI document is generated and mapped in development by the OpenAPI extension (`AddOpenApi`/`MapOpenApi`). An interactive UI (e.g. Scalar or Swagger UI) can be pointed at the generated JSON document at `/openapi/v1.json`.
 
 ## Authentication
 
