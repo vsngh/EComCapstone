@@ -24,6 +24,7 @@ public static class DependencyInjection
         services.AddScoped<IUserContext, UserContext>();
 
         services.AddScoped<ProductService>();
+        services.AddScoped<BulkProductImportService>();
         services.AddScoped<InventoryService>();
         services.AddScoped<CartService>();
         services.AddScoped<CheckoutService>();

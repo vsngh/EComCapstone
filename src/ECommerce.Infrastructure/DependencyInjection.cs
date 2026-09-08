@@ -2,6 +2,7 @@ using ECommerce.Application.Common.Interfaces;
 using ECommerce.Application.Common.Cache;
 using ECommerce.Infrastructure.Caching;
 using ECommerce.Infrastructure.BackgroundJobs;
+using ECommerce.Infrastructure.Excel;
 using ECommerce.Infrastructure.Notifications;
 using ECommerce.Infrastructure.Observability;
 using ECommerce.Infrastructure.Persistence;
@@ -60,6 +61,7 @@ public static class DependencyInjection
         services.AddScoped<IPaymentRepository, PaymentRepository>();
         services.AddScoped<IOutboxMessageRepository, OutboxMessageRepository>();
 
+        services.AddScoped<IProductExcelParser, ClosedXmlProductExcelParser>();
         services.AddScoped<IEmailService, MockEmailService>();
         services.AddScoped<IOutboxProcessingService, OutboxProcessingService>();
         services.AddSingleton<IRequestMetricsService, InMemoryRequestMetricsService>();

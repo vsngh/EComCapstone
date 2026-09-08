@@ -21,6 +21,18 @@ An OpenAPI document is generated and mapped in development by the OpenAPI extens
 | PUT | `/api/products/{id}` | Admin | Update product |
 | DELETE | `/api/products/{id}` | Admin | Deactivate/delete product |
 | PUT | `/api/products/{id}/inventory` | Admin | Update inventory |
+| POST | `/api/products/bulk-upload` | Admin | Bulk create products from an `.xlsx` file (`multipart/form-data`, max 5 MB) |
+
+### Bulk upload format
+
+`POST /api/products/bulk-upload` accepts an Excel workbook whose first worksheet has a header row:
+
+Required columns: `Name`, `SKU`, `Price`, `Category` · Optional: `Description`, `StockQuantity`
+
+- `Category` is matched by name (case-insensitive); missing categories produce per-row errors.
+- Per-row errors (bad price, non-existent category, duplicate/invalid SKU, negative stock) are reported in the response without aborting the import; valid rows are still created.
+- Response `200` with `{ totalRows, imported, failed, errors: [{ rowNumber, error }] }`. A file that is not a readable `.xlsx`, missing required columns, or with no data rows returns `400`.
+- The endpoint also creates an `Inventory` row for each imported product (default stock `0` when `StockQuantity` is omitted).
 
 ## Cart
 

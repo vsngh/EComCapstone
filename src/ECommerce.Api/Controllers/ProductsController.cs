@@ -11,10 +11,14 @@ namespace ECommerce.Api.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly ProductService _productService;
+    private readonly BulkProductImportService _bulkImportService;
 
-    public ProductsController(ProductService productService)
+    public ProductsController(
+        ProductService productService,
+        BulkProductImportService bulkImportService)
     {
         _productService = productService;
+        _bulkImportService = bulkImportService;
     }
 
     [HttpGet]
@@ -93,5 +97,17 @@ public class ProductsController : ControllerBase
     {
         await _productService.DeactivateAsync(id, cancellationToken);
         return NoContent();
+    }
+
+    [HttpPost("bulk-upload")]
+    [RequestSizeLimit(5 * 1024 * 1024)]
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<BulkUploadResult>> BulkUpload(
+        IFormFile file,
+        CancellationToken cancellationToken)
+    {
+        await using var stream = file.OpenReadStream();
+        var result = await _bulkImportService.ImportAsync(stream, cancellationToken);
+        return Ok(result);
     }
 }

@@ -1,3 +1,5 @@
+using Swashbuckle.AspNetCore.SwaggerUI;
+
 namespace ECommerce.Api.Extensions;
 
 public static class OpenApiExtensions
@@ -24,6 +26,15 @@ public static class OpenApiExtensions
         this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapOpenApi();
+
+        var app = (WebApplication)endpoints;
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/openapi/v1.json", "ECommerce API v1");
+            options.DocumentTitle = "ECommerce API";
+            options.HeadContent = "<style>#swagger-ui .topbar { display: none; }</style>";
+        });
+
         return endpoints;
     }
 }
