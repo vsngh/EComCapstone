@@ -1,3 +1,4 @@
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace ECommerce.Api.Extensions;
@@ -15,6 +16,29 @@ public static class OpenApiExtensions
                 document.Info.Version = "v1";
                 document.Info.Description =
                     "Production-style e-commerce backend built with ASP.NET Core and Clean Architecture.";
+
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Description = "Enter the JWT token as: Bearer {token}"
+                };
+
+                document.Components ??= new OpenApiComponents();
+                document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+                document.Components.SecuritySchemes["Bearer"] = securityScheme;
+
+                var bearerRequirement = new OpenApiSecurityRequirement
+                {
+                    [new OpenApiSecuritySchemeReference("Bearer", document, null)] = []
+                };
+
+                document.Security ??= [];
+                document.Security.Add(bearerRequirement);
+
                 return Task.CompletedTask;
             });
         });
