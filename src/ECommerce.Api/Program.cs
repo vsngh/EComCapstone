@@ -66,7 +66,7 @@ app.MapControllers();
 
 app.MapHub<OrderHub>("/hubs/orders");
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
 {
     app.MapOpenApiDocumentation();
 }

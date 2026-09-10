@@ -50,7 +50,7 @@ internal static class AuthHelper
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<ECommerceDbContext>();
 
-        var existing = db.Users.FirstOrDefault(u => u.Email.Value == email);
+        var existing = db.Users.FirstOrDefault(u => u.Email == new Email(email));
         if (existing is null)
         {
             var admin = User.CreateAdmin(

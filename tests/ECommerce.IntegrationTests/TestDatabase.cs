@@ -1,6 +1,6 @@
 using ECommerce.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +15,13 @@ internal static class TestDatabase
         return new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>
             {
+                // Run tests outside Development so appsettings.Development.json
+                // (persistent LocalDB, added for local dev) is not loaded.
+                // CI runs on ubuntu-latest with no LocalDB, and sharing the
+                // dev database breaks isolation (duplicate-email 409s) and
+                // exposes queries SQL Server cannot translate.
+                builder.UseEnvironment("Testing");
+
                 builder.ConfigureAppConfiguration((context, config) =>
                 {
                     config.AddInMemoryCollection(new Dictionary<string, string?>
